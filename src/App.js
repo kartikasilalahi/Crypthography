@@ -7,52 +7,62 @@ function App() {
   const [result, setresult] = useState('Result here');
   const [datainput, setdatainput] = useState([]);
   const [alphabet] = useState('abcdefghijklmnopqrstuvwxyz');
+  const [error, seterror] = useState('');
 
   const btnEncrypt = () => {
     let { teks, key } = datainput
-    var result = ''
-    for (var i = 0; i < teks.length; i++) {
-      let letter = teks[i].toLowerCase();
-      let index = alphabet.indexOf(letter);
+    if (teks && key) {
+      var result = ''
+      for (var i = 0; i < teks.length; i++) {
+        let letter = teks[i].toLowerCase();
+        let index = alphabet.indexOf(letter);
 
-      if (index !== -1) {
-        index += Number(key)
-        index = index % 26
-        console.log(index)
-        result += alphabet[index]
-      } else result += ' '
+        if (index !== -1) {
+          index += Number(key)
+          index = index % 26
+          console.log(index)
+          result += alphabet[index]
+        } else result += ' '
+      }
+      setresult(result)
+    } else {
+      seterror("Ops.. Field can't be empty!")
     }
-    setresult(result)
   }
 
   const btnDecrypt = () => {
     let { teks, key } = datainput
-    let cipherText = teks.toLowerCase()
-    let result = ""
-    for (let i = 0; i < cipherText.length; i++) {
-      let character = cipherText.charAt(i)
-      let index = alphabet.indexOf(character)
-      let cipherIndex = index - key
+    if (teks && key) {
+      let cipherText = teks.toLowerCase()
+      let result = ""
+      for (let i = 0; i < cipherText.length; i++) {
+        let character = cipherText.charAt(i)
+        let index = alphabet.indexOf(character)
+        let cipherIndex = index - key
 
-      if (index !== -1) {
-        if (cipherIndex < -26) {
-          cipherIndex = Math.abs(Math.abs(cipherIndex % 26) - 26)
-          if (cipherIndex === 26) cipherIndex = 0
-          result += alphabet.charAt(cipherIndex)
-        }
-        else if (cipherIndex < 0) {
-          cipherIndex = cipherIndex + 26
-          result += alphabet.charAt(cipherIndex)
-        } else if (cipherIndex >= 0) {
-          result += alphabet.charAt(cipherIndex)
-        }
+        if (index !== -1) {
+          if (cipherIndex < -26) {
+            cipherIndex = Math.abs(Math.abs(cipherIndex % 26) - 26)
+            if (cipherIndex === 26) cipherIndex = 0
+            result += alphabet.charAt(cipherIndex)
+          }
+          else if (cipherIndex < 0) {
+            cipherIndex = cipherIndex + 26
+            result += alphabet.charAt(cipherIndex)
+          } else if (cipherIndex >= 0) {
+            result += alphabet.charAt(cipherIndex)
+          }
 
-      } else {
-        if (result === " ") result += " "
-        else result += character
+        } else {
+          if (result === " ") result += " "
+          else result += character
+        }
       }
+      setresult(result)
+    } else {
+      seterror("Ops.. Field can't be empty!")
+
     }
-    setresult(result)
 
   }
 
@@ -67,6 +77,18 @@ function App() {
           </MDBCardHeader>
           <MDBInput size="lg" label="Input Plaintext or Ciphertext here" type="text" onChange={e => { setdatainput({ ...datainput, teks: e.target.value }) }} />
           <MDBInput size="lg" label="Input key" group type="number" onChange={e => { setdatainput({ ...datainput, key: e.target.value }) }} />
+          {
+            error ?
+              <div className="d-flex alert alert-danger ">
+                <div className='p-0'>
+                  <p >{error}</p>
+                </div>
+                <div className='p-0 ml-auto'>
+                  <p onClick={() => seterror('')} style={{ fontWeight: 'bolder', cursor: 'pointer' }}>x</p>
+                </div>
+              </div> : null
+          }
+
           <div className="d-flex">
             <MDBBtn className="w-50" onClick={btnEncrypt}>encrypt</MDBBtn>
             <MDBBtn className="w-50" onClick={btnDecrypt} >decrypt</MDBBtn>
