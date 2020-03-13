@@ -61,12 +61,9 @@ function App() {
       setresult(result)
     } else {
       seterror("Ops.. Field can't be empty!")
-
     }
-
   }
 
-  // console.log(datainput)
   return (
     <div className="App p-5">
       <div className="mx-auto" style={{ width: '50%' }}>
@@ -79,7 +76,7 @@ function App() {
           <MDBInput size="lg" label="Input key" group type="number" onChange={e => { setdatainput({ ...datainput, key: e.target.value }) }} />
           {
             error ?
-              <div className="d-flex alert alert-danger ">
+              <div className="d-flex alert alert-danger pb-0">
                 <div className='p-0'>
                   <p >{error}</p>
                 </div>
@@ -93,7 +90,7 @@ function App() {
             <MDBBtn className="w-50" onClick={btnEncrypt}>encrypt</MDBBtn>
             <MDBBtn className="w-50" onClick={btnDecrypt} >decrypt</MDBBtn>
           </div>
-          <MDBCardBody className="mt-2">
+          <MDBCardBody className="mt-2" style={{ color: 'black' }}>
             <h4>{result}</h4>
           </MDBCardBody>
         </MDBCard>
